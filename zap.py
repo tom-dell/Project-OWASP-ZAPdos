@@ -3,19 +3,34 @@
 # import all the things
 import time
 from pprint import pprint
-from zapv2 import ZAPv2
+#from zapv2 import ZAPv2
 import os
 import requests
 import datetime
 from datetime import date
 
-# ask for the API key, depth, max children, 
-apikey = input("Enter your API key: ")
-depth = int(input("How far do you want the spider to crawl? Default is 5, 0 is no limit: "))
-children = int(input("How many child nodes that can be crawled? Default is 10, 0 is no limit: "))
-max_spider = int(input("What is the max spider time in minutes? Default is 30: "))
-max_scan = int(input("What is the max scan duration in minutes? Default is 120 (2 hours): "))
-print("Leave this tab open, and tail log_file.txt")
+def get_details():
+    # ask for the API key, depth, max children, and max times
+    apikey = input("Enter your API key: ")
+    try:
+        depth = int(input("How far do you want the spider to crawl? Default is 5, 0 is no limit: "))
+    except ValueError:
+        print("Enter a number.")
+    try:
+        children = int(input("How many child nodes that can be crawled? Default is 10, 0 is no limit: "))
+    except ValueError:
+        print("Enter a number.")
+    try:
+        max_spider = int(input("What is the max spider time in minutes? Default is 30: "))
+    except ValueError:
+        print("Enter a number.")
+    try:
+        max_scan = int(input("What is the max scan duration in minutes? Default is 120 (2 hours): "))
+    except ValueError:
+        print("Enter a number.")
+    print("Leave this tab open, and tail log_file.txt")
+
+get_details()
 
 # set API key, open list of websites and the log file
 apikey = apikey
@@ -28,6 +43,8 @@ log = open('log_file.txt', 'w+')
 zap = ZAPv2(apikey=apikey)
 zap.spider.set_option_max_depth(depth)
 zap.spider.set_option_max_children(children)
+
+# put this in a function
 
 for site in sites:
     # start new session, and strip the whitespace and new line chars from the line
